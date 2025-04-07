@@ -9,7 +9,7 @@ import { NewsItem } from '@/components/NewsCard';
 import NewsGrid from '@/components/NewsGrid';
 import HorizontalNewsSection from '@/components/HorizontalNewsSection';
 import AdBanner from '@/components/AdBanner';
-import TrendingUp from '@/components/TrendingUp';
+import { TrendingUp } from 'lucide-react';
 
 // Mock data for the latest news
 const latestNews: NewsItem[] = [
