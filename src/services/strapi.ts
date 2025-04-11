@@ -2,7 +2,7 @@
 import { NewsItem } from '@/components/NewsCard';
 
 // Replace with your actual Strapi URL
-const STRAPI_API_URL = process.env.STRAPI_API_URL || 'http://localhost:1337';
+const STRAPI_API_URL = import.meta.env.VITE_STRAPI_API_URL || 'http://localhost:1337';
 
 interface StrapiResponse<T> {
   data: Array<{

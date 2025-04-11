@@ -24,4 +24,8 @@ export default defineConfig(({ mode }) => ({
     format: 'esm',
     noExternal: ['react-router-dom'],
   },
+  // Define environment variables that will be available in the client
+  define: {
+    'import.meta.env.VITE_STRAPI_API_URL': JSON.stringify(process.env.VITE_STRAPI_API_URL || 'http://localhost:1337'),
+  },
 }));

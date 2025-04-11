@@ -14,6 +14,9 @@ const routesToPrerender = [
   '/news/3'
 ]
 
+// Set environment variables for prerendering
+process.env.VITE_STRAPI_API_URL = process.env.VITE_STRAPI_API_URL || 'http://localhost:1337'
+
 async function prerender() {
   // Read the production build files
   const template = fs.readFileSync(toAbsolute('dist/client/index.html'), 'utf-8')

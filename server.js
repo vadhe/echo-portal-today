@@ -13,7 +13,11 @@ async function createServer() {
   // Create Vite server in middleware mode
   const vite = await createViteServer({
     server: { middlewareMode: true },
-    appType: 'custom'
+    appType: 'custom',
+    // Pass environment variables to Vite
+    define: {
+      'import.meta.env.VITE_STRAPI_API_URL': JSON.stringify(process.env.VITE_STRAPI_API_URL || 'http://localhost:1337'),
+    }
   })
 
   // Use vite's connect instance as middleware
