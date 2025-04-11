@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { CalendarIcon, Clock } from 'lucide-react';
 
 export interface NewsItem {
@@ -12,6 +13,7 @@ export interface NewsItem {
   readTime?: string;
   authorName?: string;
   authorAvatar?: string;
+  content?: string;
 }
 
 interface NewsCardProps {
@@ -22,7 +24,7 @@ interface NewsCardProps {
 const NewsCard: React.FC<NewsCardProps> = ({ news, variant = 'default' }) => {
   if (variant === 'featured') {
     return (
-      <div className="group relative overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+      <Link to={`/news/${news.id}`} className="group relative overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-all duration-300 block">
         <div className="aspect-[16/9] overflow-hidden">
           <img 
             src={news.imageUrl} 
@@ -49,13 +51,13 @@ const NewsCard: React.FC<NewsCardProps> = ({ news, variant = 'default' }) => {
             )}
           </div>
         </div>
-      </div>
+      </Link>
     );
   }
   
   if (variant === 'compact') {
     return (
-      <div className="flex items-start space-x-4 group">
+      <Link to={`/news/${news.id}`} className="flex items-start space-x-4 group">
         <div className="w-24 h-24 overflow-hidden rounded flex-shrink-0">
           <img 
             src={news.imageUrl} 
@@ -72,7 +74,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ news, variant = 'default' }) => {
             <span>{news.date}</span>
           </div>
         </div>
-      </div>
+      </Link>
     );
   }
   
@@ -94,9 +96,11 @@ const NewsCard: React.FC<NewsCardProps> = ({ news, variant = 'default' }) => {
           <span className="mx-2 text-gray-300">•</span>
           <span className="text-xs text-news-muted">{news.date}</span>
         </div>
-        <h3 className="text-lg font-semibold text-news-secondary group-hover:text-news-primary transition-colors mb-2">
-          {news.title}
-        </h3>
+        <Link to={`/news/${news.id}`}>
+          <h3 className="text-lg font-semibold text-news-secondary group-hover:text-news-primary transition-colors mb-2">
+            {news.title}
+          </h3>
+        </Link>
         <p className="text-news-muted text-sm line-clamp-2">
           {news.excerpt}
         </p>
