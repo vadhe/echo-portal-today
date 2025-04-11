@@ -7,61 +7,32 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import AdBanner from '@/components/AdBanner';
 import { Card, CardContent } from '@/components/ui/card';
-import { NewsItem } from '@/components/NewsCard';
-
-// Mock function to get a news item by ID
-const getNewsById = (id: string): NewsItem | undefined => {
-  // This would normally fetch from an API
-  // For demo purposes, we'll return mock data
-  return {
-    id: parseInt(id),
-    title: "Global Climate Summit Results in Historic New Agreement",
-    excerpt: "World leaders have reached a groundbreaking consensus on emission targets during the latest climate talks.",
-    category: "World",
-    imageUrl: "https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-    date: "April 7, 2025",
-    readTime: "5 min read",
-    authorName: "Sarah Johnson",
-    authorAvatar: "https://randomuser.me/api/portraits/women/44.jpg",
-    content: `
-      <p>World leaders gathered at the Global Climate Summit have finalized a historic agreement that sets ambitious new emission reduction targets. The landmark decision comes after two weeks of intense negotiations and represents a significant step forward in international climate cooperation.</p>
-      
-      <p>Under the new agreement, nations commit to reducing carbon emissions by 60% by 2035 compared to 2010 levels, with a pathway to achieve net-zero emissions by 2050. Developed nations have also pledged substantial financial support to help developing countries transition to clean energy.</p>
-      
-      <p>"This is a defining moment for our planet," said UN Secretary-General at the closing ceremony. "For the first time, we have a truly global commitment that matches the scale of the climate crisis we face."</p>
-      
-      <h2>Key Points of the Agreement</h2>
-      
-      <p>The agreement includes several groundbreaking provisions:</p>
-      
-      <ul>
-        <li>Mandatory five-year review cycles to ensure countries are meeting targets</li>
-        <li>A new international carbon pricing framework</li>
-        <li>Accelerated phase-out of coal power generation by 2030</li>
-        <li>Creation of a $100 billion annual climate fund to support transition efforts</li>
-        <li>Enhanced transparency measures to track emissions accurately</li>
-      </ul>
-      
-      <p>Climate scientists have broadly welcomed the agreement, though some activists argue the targets should be more ambitious given the accelerating pace of climate change.</p>
-      
-      <h2>Market Response</h2>
-      
-      <p>Financial markets responded positively to the news, with renewable energy stocks seeing significant gains. Analysts suggest the clear policy signals will accelerate private sector investment in clean technology and sustainable infrastructure.</p>
-      
-      <p>"This agreement provides the long-term certainty that investors have been seeking," said Maria Rodriguez, chief economist at Global Investment Partners. "We expect to see a substantial reallocation of capital toward low-carbon solutions over the next decade."</p>
-      
-      <p>The implementation phase begins immediately, with countries required to submit detailed action plans within 12 months. A new international oversight body will be established to monitor progress and provide technical assistance where needed.</p>
-      
-      <p>As delegates departed the summit, there was a palpable sense of optimism that the global community has finally aligned on a response proportionate to the climate challenge. The true test, however, will be turning these commitments into concrete action in the months and years ahead.</p>
-    `
-  };
-};
+import { useQuery } from '@tanstack/react-query';
+import { fetchNewsById } from '@/services/strapi';
 
 const NewsDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const news = getNewsById(id || '1');
+  const newsId = id || '1';
+  
+  const { data: news, isLoading, error } = useQuery({
+    queryKey: ['news', newsId],
+    queryFn: () => fetchNewsById(newsId),
+  });
 
-  if (!news) {
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Card className="w-full max-w-md mx-auto">
+          <CardContent className="pt-6">
+            <h1 className="text-2xl font-bold text-center mb-4">Loading...</h1>
+            <p className="text-center mb-6">Fetching article details</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (error || !news) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <Card className="w-full max-w-md mx-auto">
@@ -136,8 +107,6 @@ const NewsDetail = () => {
                   </div>
                 </div>
               </div>
-              
-              {/* Share buttons would go here */}
             </div>
             
             <div 
@@ -146,8 +115,6 @@ const NewsDetail = () => {
             />
             
             <AdBanner className="my-8" />
-            
-            {/* Related articles would go here */}
           </div>
         </div>
       </div>

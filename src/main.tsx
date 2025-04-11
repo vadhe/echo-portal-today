@@ -4,9 +4,22 @@ import { createRoot, hydrateRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App.tsx';
 import './index.css';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { 
+  QueryClient, 
+  QueryClientProvider,
+  Hydrate
+} from '@tanstack/react-query';
 
-const queryClient = new QueryClient();
+// Get the dehydrated state from the server
+const dehydratedState = window.__REACT_QUERY_STATE__;
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 60 * 1000, // 1 minute
+    },
+  },
+});
 
 // Client-side rendering
 const rootElement = document.getElementById('root');
@@ -26,9 +39,11 @@ if (rootElement) {
     hydrateRoot(
       rootElement,
       <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <Hydrate state={dehydratedState}>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </Hydrate>
       </QueryClientProvider>
     );
   }
