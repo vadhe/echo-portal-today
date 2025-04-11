@@ -7,11 +7,11 @@ import './index.css';
 import { 
   QueryClient, 
   QueryClientProvider,
-  Hydrate
+  HydrationBoundary
 } from '@tanstack/react-query';
 
 // Get the dehydrated state from the server
-const dehydratedState = window.__REACT_QUERY_STATE__;
+const dehydratedState = (window as any).__REACT_QUERY_STATE__;
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -39,11 +39,11 @@ if (rootElement) {
     hydrateRoot(
       rootElement,
       <QueryClientProvider client={queryClient}>
-        <Hydrate state={dehydratedState}>
+        <HydrationBoundary state={dehydratedState}>
           <BrowserRouter>
             <App />
           </BrowserRouter>
-        </Hydrate>
+        </HydrationBoundary>
       </QueryClientProvider>
     );
   }
